@@ -27,7 +27,10 @@ export class WiserClient {
 
     this.log = log;
     this.authKey = config.authKey;
-    this.log.debug('feller fetch function');
+    this.log.debug('wiser fetch function');
+    this.log.debug('wiser auth key: ' + config.authKey);
+
+
     this.loadStateChange = new EventEmitter();
 
     const createWebSocket = (ip = config.ip, authKey = config.authKey) => {
@@ -151,9 +154,11 @@ export class WiserClient {
 
   // sets the load control setting of the specified load with the given id
   async ctrlLoad(id: number, loadCtrl : IloadCtrl) : Promise<boolean> {
-    this.log.debug('setLoadControl for id ' + id);
+    this.log.debug('ctrlLoad for id ' + id);
+    this.log.debug('ctrlLoad with authKey ' + this.authKey + ' and url ' + this.baseUrl);
+    this.log.debug('ctrlLoad body ' + JSON.stringify(loadCtrl));
     const response = await fetch(this.baseUrl + '/loads/' + id + '/ctrl', {
-      headers: { 'Authorization': 'Bearer ' + this.authToken },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authKey },
       method: 'put',
       body: JSON.stringify(loadCtrl),
     });

@@ -1,6 +1,7 @@
 # restful api test file
 @baseUrl = http://{{$processEnv WISERIP}}/api
 @token = {{$processEnv WISERTOKEN}}
+#@token = "1"
 
 ### claim token - press button on device!
 
@@ -29,7 +30,7 @@ GET {{baseUrl}}/loads/3/target_state
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
-### set on load 3 00032021 - Lampe Strom
+### set on load 3
 
 PUT {{baseUrl}}/loads/3/ctrl
 Content-Type: application/json
@@ -51,37 +52,21 @@ Authorization: Bearer {{token}}
    "event": "click"
 }
 
-### set on load 4 00032021 - Lampe Küche
-
-PUT {{baseUrl}}/loads/4/ctrl
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-   "button": "on",
-   "event": "click"
-}
-
-### set off load 4
-
-PUT {{baseUrl}}/loads/4/ctrl
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-   "button": "off",
-   "event": "click"
-}
-
 ### get devices
 
 GET {{baseUrl}}/devices
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
-### get rooms
+### get site
 
-GET {{baseUrl}}/rooms
+GET {{baseUrl}}/site
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### get jobs
+
+GET {{baseUrl}}/jobs
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

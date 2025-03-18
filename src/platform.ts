@@ -36,7 +36,8 @@ export class WiserFellerPlatform implements DynamicPlatformPlugin {
     try {
       const myConfig: Iconfig = {
         ip: this.config.ip,
-        authKey: this.config.authKey,
+        //authKey: this.config.authKey,
+        authKey: 'fb7365f8-8796-4495-9057-3816d9968416',
       };
       this.myClient = new WiserClient(myConfig, this.log);
     } catch (error) {
@@ -44,7 +45,7 @@ export class WiserFellerPlatform implements DynamicPlatformPlugin {
     }
 
 
-    this.log.debug('Finished initializing platform:', this.config.name);
+    this.log.debug('Finished initializing platform');
 
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
     // Dynamic Platform plugins should only register new accessories after this event was fired,
