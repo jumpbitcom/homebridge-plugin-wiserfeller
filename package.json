@@ -1,22 +1,24 @@
 {
-  "name": "homebridge-plugin-name",
-  "displayName": "Plugin Name",
-  "type": "module",
-  "version": "1.0.0",
-  "private": true,
-  "description": "A short description about what your plugin does.",
-  "author": "Your Name",
+  "name": "homebridge-plugin-wiserfeller",
+  "displayName": "Wiser devices plugin provided by Jumpbit",
+  "version": "1.0.7",
+  "type": "commonjs",
+  "description": "Homebridge plugin to link Wiser by Feller AG devices to Apple HomeKit.",
+  "author": "Martin Weber Nissle",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/USERNAME/GITHUB_PROJECT_NAME#readme",
+  "homepage": "https://github.com/jumpbitcom/homebridge-plugin-wiserfeller",
   "repository": {
     "type": "git",
-    "url": "https://github.com/USERNAME/GITHUB_PROJECT_NAME.git"
+    "url": "git+https://github.com/jumpbitcom/homebridge-plugin-wiserfeller.git"
   },
   "bugs": {
-    "url": "https://github.com/USERNAME/GITHUB_PROJECT_NAME/issues"
+    "url": "https://github.com/jumpbitcom/homebridge-plugin-wiserfeller/issues"
   },
   "keywords": [
-    "homebridge-plugin"
+    "homebridge-plugin",
+    "wiser",
+    "feller",
+    "homekit"
   ],
   "main": "dist/index.js",
   "engines": {
@@ -25,18 +27,23 @@
   },
   "scripts": {
     "build": "rimraf ./dist && tsc",
+    "clean": "rimraf ./dist && rimraf ./test/accessories && rimraf ./test/persist && rimraf package-lock.json && rimraf ./node_modules",
     "lint": "eslint . --max-warnings=0",
     "prepublishOnly": "npm run lint && npm run build",
     "watch": "npm run build && npm link && nodemon"
   },
   "dependencies": {
-    "homebridge-lib": "^7.1.4"
+    "homebridge-lib": "^7.1.4",
+    "node-fetch": "^3.3.2",
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@types/node": "^22.13.5",
+    "@types/ws": "^8.18.0",
     "eslint": "^9.21.0",
     "homebridge": "^2.0.0-beta.0",
+    "homebridge-config-ui-x": "^4.71.2",
     "nodemon": "^3.1.9",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",

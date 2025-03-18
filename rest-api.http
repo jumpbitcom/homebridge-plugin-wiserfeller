@@ -1,0 +1,93 @@
+# restful api test file
+@baseUrl = http://{{$processEnv WISERIP}}/api
+@token = {{$processEnv WISERTOKEN}}
+
+### claim token - press button on device!
+
+POST {{baseUrl}}/account/claim
+Content-Type: application/json
+
+{
+   "user": "apiuser"
+}
+
+### get info
+
+GET {{baseUrl}}/info
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### get loads
+
+GET {{baseUrl}}/loads
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### get loads
+
+GET {{baseUrl}}/loads/3/target_state
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### set on load 3 00032021 - Lampe Strom
+
+PUT {{baseUrl}}/loads/3/ctrl
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "button": "on",
+   "event": "click"
+}
+
+### set off load 3
+
+PUT {{baseUrl}}/loads/3/ctrl
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "button": "off",
+   "event": "click"
+}
+
+### set on load 4 00032021 - Lampe Küche
+
+PUT {{baseUrl}}/loads/4/ctrl
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "button": "on",
+   "event": "click"
+}
+
+### set off load 4
+
+PUT {{baseUrl}}/loads/4/ctrl
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "button": "off",
+   "event": "click"
+}
+
+### get devices
+
+GET {{baseUrl}}/devices
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### get rooms
+
+GET {{baseUrl}}/rooms
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### get accounts
+
+GET {{baseUrl}}/account
+Content-Type: application/json
+Authorization: Bearer {{token}}
+

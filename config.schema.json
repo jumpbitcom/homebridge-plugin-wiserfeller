@@ -1,16 +1,22 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "homebridge-plugin-wiserfeller",
   "pluginType": "platform",
   "singular": true,
   "strictValidation": false,
   "schema": {
     "type": "object",
     "properties": {
-      "name": {
-        "title": "Name",
+      "ip": {
+        "title": "IP address of your wiser device",
         "type": "string",
         "required": true,
-        "default": "Example Dynamic Platform"
+        "default": ""
+      },
+      "authKey" : {
+        "title" : "Authorization token retrieved by claim",
+        "type": "string",
+        "required": true,
+        "default": ""
       }
     }
   }

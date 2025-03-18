@@ -27,7 +27,7 @@ export default tseslint.config(
   {
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: 'module',
+      sourceType: 'commonjs',
     },
   },
   eslint.configs.recommended,

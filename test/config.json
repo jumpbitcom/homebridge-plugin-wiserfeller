@@ -1,0 +1,22 @@
+{
+  "bridge": {
+    "name": "WiserFellerBridge",
+    "username": "CC:22:3D:E7:1E:4F",
+    "port": 49047,
+    "pin": "149-47-854"
+  },
+  "description": "HomeBridge Wiser devices",
+  "plugins": [
+    "homebridge-plugin-wiserfeller",
+    "homebridge-config-ui-x"
+  ],
+  "platforms": [
+    {
+      "name": "WiserFeller",
+      "platform": "homebridge-plugin-wiserfeller",
+      "ip": "192.168.1.1",
+      "authKey": "1234567890"
+    }
+  ],
+  "accessories": []
+}
