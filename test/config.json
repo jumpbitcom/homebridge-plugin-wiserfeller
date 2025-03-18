@@ -3,6 +3,7 @@
     "name": "WiserFellerBridge",
     "username": "CC:22:3D:E7:1E:4F",
     "port": 49047,
+    "bind": "10.0.0.103",
     "pin": "149-47-854"
   },
   "description": "HomeBridge Wiser devices",
@@ -11,6 +12,12 @@
     "homebridge-config-ui-x"
   ],
   "platforms": [
+    {
+      "platform": "config",
+      "name": "Config",
+      "port": 8080,
+      "sudo": false
+    },
     {
       "name": "WiserFeller",
       "platform": "homebridge-plugin-wiserfeller",
