@@ -5,6 +5,7 @@ import { Logger } from 'homebridge';
 import { EventEmitter } from 'stream';
 import { IloadStateResponse, IloadsResponse, IsetLoadStateResponse, IsetLoadCtrlResponse, IloadState, IloadCtrl, Iload } from './model/wiserComm';
 import { Iconfig } from './model/wiserConfig';
+import { OutgoingHttpHeaders } from 'http';
 
 
 export class WiserClient {
@@ -13,6 +14,7 @@ export class WiserClient {
   private log : Logger;
   private websocket : WebSocket;
   private baseUrl: string;
+  private headers: OutgoingHttpHeaders;
   public loadStateChange : EventEmitter;
 
   constructor(config: Iconfig, log: Logger) {
@@ -27,14 +29,13 @@ export class WiserClient {
 
     this.log = log;
     this.authKey = config.authKey;
-    this.log.debug('wiser fetch function');
-    this.log.debug('wiser auth key: ' + config.authKey);
-
+    this.log.debug('wiser client fetch function construct');
+    this.headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authKey  };
 
     this.loadStateChange = new EventEmitter();
 
-    const createWebSocket = (ip = config.ip, authKey = config.authKey) => {
-      const result = new WebSocket('ws://' + ip + '/api', [], { headers: { 'Authorization': 'Bearer ' + authKey } } );
+    const createWebSocket = (ip = config.ip, headers = this.headers) => {
+      const result = new WebSocket('ws://' + ip + '/api', [], { headers: headers } );
 
       result.on('message', (message) => {
         this.log.debug('message received', message.toLocaleString());
@@ -86,7 +87,7 @@ export class WiserClient {
       return result;
     };
 
-    this.websocket = createWebSocket(config.ip, config.authKey);
+    this.websocket = createWebSocket(config.ip, this.headers);
     this.baseUrl = 'http://' + config.ip + '/api';
   }
 
@@ -94,7 +95,7 @@ export class WiserClient {
   // get the wiser loads
   async getLoads(): Promise<Iload[]> {
     this.log.debug('get loads via API', this.baseUrl + '/loads/');
-    const response = await fetch (this.baseUrl + '/loads', { headers: { 'Authorization': 'Bearer ' + this.authKey } });
+    const response = await fetch (this.baseUrl + '/loads', { headers: this.headers });
     try {
       if (response.ok) {
         const body = await response.json() as IloadsResponse;
@@ -113,7 +114,7 @@ export class WiserClient {
   // dont use this method for getting a single load - they will be emitted via the websocket (see constructor)
   async getLoadState(id: number) : Promise<IloadState> {
     this.log.debug('fetching loadstate via API', this.baseUrl + '/loads/' + id + '/state');
-    const response = await fetch(this.baseUrl + '/loads/' + id + '/state', { headers: { 'Authorization': 'Bearer ' + this.authKey } });
+    const response = await fetch(this.baseUrl + '/loads/' + id + '/state', { headers: this.headers });
     try {
       if (response.ok) {
         const body = await response.json() as IloadStateResponse;
@@ -133,7 +134,7 @@ export class WiserClient {
   async setLoadState(id: number, state: IloadState): Promise<IloadState> {
     this.log.debug('setLoadstate for id ' + id);
     const response = await fetch(this.baseUrl + '/loads/' + id + '/target_state', {
-      headers: { 'Authorization': 'Bearer ' + this.authToken },
+      headers: this.headers,
       method: 'put',
       body: JSON.stringify(state),
     });
@@ -155,10 +156,9 @@ export class WiserClient {
   // sets the load control setting of the specified load with the given id
   async ctrlLoad(id: number, loadCtrl : IloadCtrl) : Promise<boolean> {
     this.log.debug('ctrlLoad for id ' + id);
-    this.log.debug('ctrlLoad with authKey ' + this.authKey + ' and url ' + this.baseUrl);
     this.log.debug('ctrlLoad body ' + JSON.stringify(loadCtrl));
     const response = await fetch(this.baseUrl + '/loads/' + id + '/ctrl', {
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authKey },
+      headers: this.headers,
       method: 'put',
       body: JSON.stringify(loadCtrl),
     });

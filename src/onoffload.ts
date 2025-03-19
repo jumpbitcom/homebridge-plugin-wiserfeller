@@ -88,8 +88,12 @@ export class OnOffLoad {
 
   //TODO: update this method name to "updateState"
   async updateOn(state: IloadState): Promise<void> {
-    this.on = true;
-    //this.platform.log.debug('update new loadstate on', this.accessory.context.load.id);
-    this.service.updateCharacteristic(this.platform.Characteristic.On, state.bri !== 0);
+    this.platform.log.debug('update new loadstate on ' + this.accessory.context.load.id + ' with state ' + JSON.stringify(state));
+    if (state.bri === 0) {
+      this.on = false;
+    } else {
+      this.on = true;
+    }
+    this.service.updateCharacteristic(this.platform.Characteristic.On, this.on);
   }
 }

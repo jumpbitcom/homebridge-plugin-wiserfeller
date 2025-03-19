@@ -33,19 +33,20 @@ export class WiserFellerPlatform implements DynamicPlatformPlugin {
     this.Service = api.hap.Service;
     this.Characteristic = api.hap.Characteristic;
 
+    this.log.debug('wiser plugin initializing platform');
+
     try {
       const myConfig: Iconfig = {
         ip: this.config.ip,
-        //authKey: this.config.authKey,
-        authKey: 'fb7365f8-8796-4495-9057-3816d9968416',
+        authKey: this.config.authKey,
       };
+      this.log.debug('wiser plugin config set with device ip: ' + myConfig.ip);
       this.myClient = new WiserClient(myConfig, this.log);
     } catch (error) {
       this.log.error('error occured during wiser by feller client initialization: ', error);
     }
 
 
-    this.log.debug('Finished initializing platform');
 
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
     // Dynamic Platform plugins should only register new accessories after this event was fired,
@@ -75,6 +76,7 @@ export class WiserFellerPlatform implements DynamicPlatformPlugin {
    * must not be registered again to prevent "duplicate UUID" errors.
    */
   async discoverDevices() {
+    this.log.debug('discover devices called');
 
     const loads: Iload[] = await this.myClient?.getLoads() ?? [];
 
@@ -93,7 +95,7 @@ export class WiserFellerPlatform implements DynamicPlatformPlugin {
       const existingAccessory = this.accessories.get(uuid);
 
       if (existingAccessory) {
-        this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+        this.log.info('Restoring existing accessory from cache: ' + existingAccessory.displayName + ' ' + load.name + ' ' + load.id + ' as type: ' + load.type);
         switch (load.type) {
         case 'onoff':
           new OnOffLoad(this, existingAccessory);
