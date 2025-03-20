@@ -24,15 +24,29 @@ GET {{baseUrl}}/loads
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
-### get loads
+### set load n tagetstate
 
-GET {{baseUrl}}/loads/3/target_state
+PUT {{baseUrl}}/loads/1/target_state
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
-### set on load 3
+{
+   "bri": 10000
+}
 
-PUT {{baseUrl}}/loads/3/ctrl
+### set load n tagetstate
+
+PUT {{baseUrl}}/loads/1/target_state
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "bri": 0
+}
+
+### set on load n
+
+PUT {{baseUrl}}/loads/1/ctrl
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -41,9 +55,9 @@ Authorization: Bearer {{token}}
    "event": "click"
 }
 
-### set off load 3
+### set off load n
 
-PUT {{baseUrl}}/loads/3/ctrl
+PUT {{baseUrl}}/loads/1/ctrl
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -76,3 +90,12 @@ GET {{baseUrl}}/account
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
+### set name of load n
+
+PATCH {{baseUrl}}/loads/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "name": "new name"
+}

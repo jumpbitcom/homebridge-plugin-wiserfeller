@@ -42,8 +42,8 @@ export class Dimmer extends OnOffLoad {
     return this.brightness;
   }
 
-  async updateOn(state: IloadState) {
-    super.updateOn(state);
+  async updateState(state: IloadState) {
+    super.updateState(state);
     if (typeof state.bri !== 'undefined') {
       this.service.updateCharacteristic(this.platform.Characteristic.Brightness, state.bri / 100);
       this.brightness = new Promise(resolve => resolve(state.bri! / 100));

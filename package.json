@@ -1,7 +1,7 @@
 {
   "name": "homebridge-plugin-wiserfeller",
   "displayName": "Wiser devices plugin provided by Jumpbit",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "commonjs",
   "description": "Homebridge plugin to link Wiser by Feller AG devices to Apple HomeKit.",
   "author": "Martin Weber Nissle",

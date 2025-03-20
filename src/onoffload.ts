@@ -1,5 +1,5 @@
 import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
-import { IloadCtrl, IloadState } from './model/wiserComm';
+import { IloadState } from './model/wiserComm';
 
 import { WiserFellerPlatform } from './platform';
 
@@ -41,7 +41,7 @@ export class OnOffLoad {
 
     this.on = false;
 
-    this.platform.myClient?.loadStateChange.on(this.accessory.context.load.id.toString(), (loadState) => this.updateOn(loadState));
+    this.platform.myClient?.loadStateChange.on(this.accessory.context.load.id.toString(), (loadState) => this.updateState(loadState));
   }
 
   /**
@@ -51,18 +51,21 @@ export class OnOffLoad {
   async setOn(value: CharacteristicValue) {
     // implement your own code to turn your device on/off
     this.platform.log.debug('Set Characteristic On ->', value);
-    let clickOn: IloadCtrl;
+    let newState: IloadState = {};
     if (value === true) {
-      clickOn = <IloadCtrl> { 'button': 'on', 'event': 'click' };
+      newState = <IloadState> { 'bri': 10000 };
     } else {
-      clickOn = <IloadCtrl> { 'button': 'off', 'event': 'click' };
+      newState = <IloadState> { 'bri': 0 };
     }
-    this.platform.log.debug('Set command to ->', clickOn);
-    const retVal: boolean = await this.platform.myClient?.ctrlLoad(this.accessory.context.load.id, clickOn) ?? false;
-    this.platform.log.debug('return of command ->', retVal);
-    this.on = retVal;
+    this.platform.log.debug('Set new state to ->', newState);
+    const retVal: IloadState = await this.platform.myClient?.setLoadState(this.accessory.context.load.id, newState) ?? {};
+    this.platform.log.debug('return of command ->', JSON.stringify(retVal));
+    if (retVal.bri === 0) {
+      this.on = false;
+    } else {
+      this.on = true;
+    }
   }
-
 
   /**
    * Handle the "GET" requests from HomeKit
@@ -86,8 +89,8 @@ export class OnOffLoad {
 
   }
 
-  //TODO: update this method name to "updateState"
-  async updateOn(state: IloadState): Promise<void> {
+  // update this method name to "updateState"
+  async updateState(state: IloadState): Promise<void> {
     this.platform.log.debug('update new loadstate on ' + this.accessory.context.load.id + ' with state ' + JSON.stringify(state));
     if (state.bri === 0) {
       this.on = false;

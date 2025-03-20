@@ -113,11 +113,12 @@ export class WiserClient {
 
   // dont use this method for getting a single load - they will be emitted via the websocket (see constructor)
   async getLoadState(id: number) : Promise<IloadState> {
-    this.log.debug('fetching loadstate via API', this.baseUrl + '/loads/' + id + '/state');
+    this.log.debug('getLoadState for id ', id);
     const response = await fetch(this.baseUrl + '/loads/' + id + '/state', { headers: this.headers });
     try {
       if (response.ok) {
         const body = await response.json() as IloadStateResponse;
+        this.log.debug('getLoadState OK with message: ' + JSON.stringify(body));
         return body.data.state as IloadState;
       } else {
         this.log.debug(JSON.stringify(response));
@@ -133,6 +134,7 @@ export class WiserClient {
   // sets the load state of the specified load with the given id
   async setLoadState(id: number, state: IloadState): Promise<IloadState> {
     this.log.debug('setLoadstate for id ' + id);
+    this.log.debug('setLoadstate body ' + JSON.stringify(state));
     const response = await fetch(this.baseUrl + '/loads/' + id + '/target_state', {
       headers: this.headers,
       method: 'put',
@@ -141,6 +143,7 @@ export class WiserClient {
     try {
       if (response.ok) {
         const body = await response.json() as IsetLoadStateResponse;
+        this.log.debug('setLoadState OK with message: ' + JSON.stringify(body));
         return body.data.target_state as IloadState;
       } else {
         this.log.debug(JSON.stringify(response));
@@ -165,7 +168,7 @@ export class WiserClient {
     try {
       if (response.ok) {
         const body = await response.json() as IsetLoadCtrlResponse;
-        this.log.debug(JSON.stringify(body));
+        this.log.debug('ctrlLoad OK with message: ' + JSON.stringify(body));
         if (body.status === 'success'){
           return true;
         }
